@@ -14,6 +14,15 @@ object StatusColors {
     val Problem = Color(0xFFC0392B)
 }
 
+/** Bar and heat-map colour, checked for lightness, chroma and contrast against each surface. */
+object ChartColors {
+    val Light = Color(0xFF2E6FB0)
+    val Dark = Color(0xFF5490CC)
+
+    val current: Color
+        @Composable get() = if (isSystemInDarkTheme()) Dark else Light
+}
+
 private val Light = lightColorScheme(
     primary = Color(0xFF1B3A57),
     onPrimary = Color.White,
