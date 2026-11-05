@@ -17,7 +17,7 @@ class ScanGate(
     /** How long the sheet must be gone before the next one is accepted. */
     private val removalMillis: Long = 250,
     /** Sheet's longest side must cover at least this fraction of the frame's. */
-    private val minFrameCoverage: Double = 0.5,
+    private val minFrameCoverage: Double = 0.4,
 ) {
     enum class Phase {
         /** No sheet in view. */
