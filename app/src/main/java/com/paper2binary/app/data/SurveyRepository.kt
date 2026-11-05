@@ -258,7 +258,7 @@ class SurveyRepository(context: Context, db: AppDatabase) {
     }
 
     private fun safeFileName(title: String): String =
-        title.replace(Regex("""[^\p{L}\p{N}_-]+"""), "_").trim('_').ifEmpty { "survey" }.take(40)
+        title.replace(Regex("""[^\p{L}\p{M}\p{N}_-]+"""), "_").trim('_').ifEmpty { "survey" }.take(40)
 
     private companion object {
         const val SHEET_JPEG_QUALITY = 70
