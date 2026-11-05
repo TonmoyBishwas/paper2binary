@@ -60,4 +60,8 @@ dependencies {
     implementation(libs.compose.material3)
     implementation(libs.compose.icons)
     debugImplementation(libs.compose.ui.tooling)
+
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
 }
