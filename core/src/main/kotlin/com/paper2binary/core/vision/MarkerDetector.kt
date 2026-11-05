@@ -21,7 +21,7 @@ data class PageQuad(val corners: List<Point>, val markerSize: Double) {
         get() = (0 until 4).maxOf { distance(corners[it], corners[(it + 1) % 4]) }
 }
 
-internal fun distance(a: Point, b: Point) = hypot(a.x - b.x, a.y - b.y)
+fun distance(a: Point, b: Point) = hypot(a.x - b.x, a.y - b.y)
 
 /**
  * Finds the four printed corner markers.
