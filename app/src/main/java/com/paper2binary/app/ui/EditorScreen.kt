@@ -196,7 +196,7 @@ fun EditorScreen(surveyId: String?, onDone: (String) -> Unit, onBack: () -> Unit
             if (structureLocked) {
                 item {
                     Text(
-                        "$responseCount sheets are already scanned, so only the wording can be changed. " +
+                        counted(responseCount, "sheet") + (if (responseCount == 1) " is" else " are") + " already scanned, so only the wording can be changed. " +
                             "Adding or removing options would no longer match the printed papers.",
                         style = MaterialTheme.typography.bodySmall,
                         color = StatusColors.Attention,

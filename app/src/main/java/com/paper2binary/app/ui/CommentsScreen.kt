@@ -70,7 +70,7 @@ fun CommentsScreen(surveyId: String, onBack: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             item {
-                Text("$doneCount of ${withComments.size} comments typed up", style = MaterialTheme.typography.titleMedium)
+                Text("$doneCount of " + counted(withComments.size, "comment") + " typed up", style = MaterialTheme.typography.titleMedium)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     FilterChip(selected = onlyPending, onClick = { onlyPending = true }, label = { Text("To do") })
                     FilterChip(selected = !onlyPending, onClick = { onlyPending = false }, label = { Text("All") })

@@ -75,7 +75,7 @@ fun ResultsScreen(surveyId: String, onBack: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             item {
-                Text("${records.size} sheets", style = MaterialTheme.typography.headlineSmall)
+                Text(counted(records.size, "sheet"), style = MaterialTheme.typography.headlineSmall)
                 if (records.isEmpty()) {
                     Text(
                         "Nothing to show yet. Results appear here as sheets are scanned.",
@@ -110,7 +110,7 @@ private fun QuestionChart(index: Int, stats: QuestionStats) {
                 val percent = (option.share * 100).roundToInt()
                 Column(
                     Modifier.semantics {
-                        contentDescription = "${option.label}: ${option.count} answers, $percent percent"
+                        contentDescription = "${option.label}: ${counted(option.count, "answer")}, $percent percent"
                     },
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {

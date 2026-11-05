@@ -114,7 +114,7 @@ fun SurveyScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            Text("$count sheets scanned", style = MaterialTheme.typography.headlineSmall)
+            Text(counted(count, "sheet") + " scanned", style = MaterialTheme.typography.headlineSmall)
             if (survey?.placeholder == true) {
                 Text(
                     "This survey came from a sheet's QR code, so its wording is unknown. " +
@@ -150,7 +150,7 @@ fun SurveyScreen(
         AlertDialog(
             onDismissRequest = { confirmDelete = false },
             title = { Text("Delete this survey?") },
-            text = { Text("This also deletes the results of all $count scanned sheets from this phone.") },
+            text = { Text("This also deletes the results of " + counted(count, "scanned sheet") + " from this phone.") },
             confirmButton = {
                 TextButton(onClick = {
                     confirmDelete = false

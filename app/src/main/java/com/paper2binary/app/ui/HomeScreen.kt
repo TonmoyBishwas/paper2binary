@@ -115,7 +115,7 @@ private fun SurveyCard(summary: SurveySummary, onClick: () -> Unit) {
         Column(Modifier.padding(16.dp)) {
             Text(summary.survey.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
             Text(
-                "${summary.survey.questions.size} questions  ·  ${summary.responseCount} sheets scanned",
+                "${counted(summary.survey.questions.size, "question")}  ·  ${counted(summary.responseCount, "sheet")} scanned",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
