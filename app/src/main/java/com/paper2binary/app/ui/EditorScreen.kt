@@ -1,5 +1,6 @@
 package com.paper2binary.app.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -18,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -105,6 +107,26 @@ fun EditorScreen(surveyId: String?, onDone: (String) -> Unit, onBack: () -> Unit
         }
     }
 
+    var confirmLeave by remember { mutableStateOf(false) }
+    val hasContent = title.isNotBlank() || questions.any { it.text.isNotBlank() }
+    val askBeforeLeaving = {
+        if (hasContent) confirmLeave = true else onBack()
+    }
+    BackHandler(onBack = askBeforeLeaving)
+    if (confirmLeave) {
+        AlertDialog(
+            onDismissRequest = { confirmLeave = false },
+            title = { Text("Leave without saving?") },
+            text = { Text("Changes made here will be lost.") },
+            confirmButton = {
+                TextButton(onClick = { confirmLeave = false; onBack() }) { Text("Leave") }
+            },
+            dismissButton = {
+                TextButton(onClick = { confirmLeave = false }) { Text("Keep editing") }
+            },
+        )
+    }
+
     fun buildSurvey(id: String) = Survey(
         id = id,
         title = title.trim(),
@@ -132,7 +154,7 @@ fun EditorScreen(surveyId: String?, onDone: (String) -> Unit, onBack: () -> Unit
         topBar = {
             TopAppBar(
                 title = { Text(if (surveyId == null) "New survey" else "Edit survey") },
-                navigationIcon = { BackButton(onBack) },
+                navigationIcon = { BackButton(askBeforeLeaving) },
                 actions = {
                     TextButton(
                         enabled = problem == null,
