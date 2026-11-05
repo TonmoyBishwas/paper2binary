@@ -38,8 +38,8 @@ no account, and everything stays on the phone.
 ## Comments
 
 Handwritten comments are cropped and stored as images. On-device recognition makes a first draft,
-which you confirm or correct on the Comments screen. Treat the draft as a starting point: it does
-reasonably on neat English handwriting and does not read Bengali, so the image is always kept.
+which you confirm or correct on the Comments screen. Treat the draft as a starting point: it works
+best on neat handwriting in Latin script and does not read other scripts, so the image is always kept.
 
 ## Using several phones
 

@@ -106,7 +106,6 @@ private fun QuestionChart(index: Int, stats: QuestionStats) {
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.SemiBold,
             )
-            val largest = stats.options.maxOfOrNull { it.count }?.coerceAtLeast(1) ?: 1
             stats.options.forEach { option ->
                 val percent = (option.share * 100).roundToInt()
                 Column(
@@ -128,7 +127,8 @@ private fun QuestionChart(index: Int, stats: QuestionStats) {
                             fontWeight = FontWeight.Medium,
                         )
                     }
-                    Bar(option.count.toFloat() / largest)
+                    // The track stands for everyone who answered, so the bar shows the true share.
+                    Bar(option.share.toFloat().coerceIn(0f, 1f))
                 }
             }
             Text(

@@ -147,9 +147,10 @@ fun QuestionCorrector(
                         },
                         onClick = {
                             val next = when {
-                                // Keeping several boxes on is valid on a multi-select question,
-                                // and also lets a person fix one of several on a single-choice one.
                                 question.multiSelect -> if (isOn) selected - option else selected + option
+                                // With several ticks on a single-choice question, a tap means
+                                // "keep this one", so it must not clear the answer altogether.
+                                selected.size > 1 -> listOf(option)
                                 isOn -> emptyList()
                                 else -> listOf(option)
                             }

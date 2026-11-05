@@ -427,6 +427,19 @@ private fun ReviewContent(pending: PendingSheet, remaining: Int, model: ScannerV
                     )
                 }
             }
+            // Two answers on a single-choice question would inflate the counts, so a decision is
+            // required before saving. Removing both is allowed: it records the question as blank.
+            val unresolved = pending.survey.questions.indices.filter { q ->
+                !pending.survey.questions[q].multiSelect && answers[q].size > 1
+            }
+            if (unresolved.isNotEmpty()) {
+                Text(
+                    "Choose one answer for question " + unresolved.joinToString(", ") { "${it + 1}" } + " to save.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = StatusColors.Attention,
+                    modifier = Modifier.padding(horizontal = 12.dp),
+                )
+            }
             Row(
                 Modifier
                     .fillMaxWidth()
@@ -435,6 +448,7 @@ private fun ReviewContent(pending: PendingSheet, remaining: Int, model: ScannerV
             ) {
                 OutlinedButton(onClick = model::discardPending, modifier = Modifier.weight(1f)) { Text("Discard") }
                 Button(
+                    enabled = unresolved.isEmpty(),
                     onClick = { model.confirmPending(answers.toList()) },
                     modifier = Modifier.weight(1f),
                 ) { Text("Save") }
