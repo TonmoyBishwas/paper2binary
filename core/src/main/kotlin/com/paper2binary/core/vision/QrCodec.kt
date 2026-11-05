@@ -11,11 +11,16 @@ import com.google.zxing.common.GlobalHistogramBinarizer
 import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.qrcode.QRCodeReader
 import com.google.zxing.qrcode.QRCodeWriter
+import com.google.zxing.qrcode.decoder.Decoder
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import com.paper2binary.core.imaging.GrayImage
+import com.paper2binary.core.layout.RectMm
 
 /** Thin wrapper around ZXing so the rest of the code only ever deals with [GrayImage]. */
 object QrCodec {
+
+    /** Width of the white border printed around the QR code, in modules (the standard value). */
+    const val QUIET_MODULES = 4
 
     /** QR modules with no quiet zone; the caller places them inside a white rectangle. */
     fun encode(payload: String): BitMatrix {
@@ -43,6 +48,44 @@ object QrCodec {
                 return QRCodeReader().decode(bitmap, hints).text
             } catch (_: ReaderException) {
                 // Try the next binarizer; a failure here is an expected outcome, not an error.
+            }
+        }
+        return null
+    }
+
+    /**
+     * Decodes a QR code whose position is already known exactly, skipping ZXing's own search for
+     * the finder patterns. The corner markers tell us where every module must be, so each one can
+     * be averaged in place. This still works on photos too blurred or noisy for the normal search.
+     *
+     * @param sample returns the brightness at a position in sheet millimetres
+     */
+    fun decodeAtKnownPosition(rect: RectMm, quietModules: Int, sample: (Double, Double) -> Int): String? {
+        for (version in 1..4) {
+            val modules = 17 + 4 * version
+            val moduleSize = rect.width / (modules + 2 * quietModules)
+            val values = IntArray(modules * modules)
+            var total = 0L
+            for (my in 0 until modules) for (mx in 0 until modules) {
+                val cx = rect.left + (mx + quietModules + 0.5) * moduleSize
+                val cy = rect.top + (my + quietModules + 0.5) * moduleSize
+                val d = moduleSize * 0.22
+                val v = (
+                    sample(cx, cy) + sample(cx - d, cy - d) + sample(cx + d, cy - d) +
+                        sample(cx - d, cy + d) + sample(cx + d, cy + d)
+                    ) / 5
+                values[my * modules + mx] = v
+                total += v
+            }
+            val threshold = total / values.size
+            val bits = BitMatrix(modules)
+            for (my in 0 until modules) for (mx in 0 until modules) {
+                if (values[my * modules + mx] < threshold) bits.set(mx, my)
+            }
+            try {
+                return Decoder().decode(bits).text
+            } catch (_: ReaderException) {
+                // Wrong version or wrong orientation; try the next candidate.
             }
         }
         return null

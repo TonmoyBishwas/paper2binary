@@ -71,13 +71,13 @@ object SyntheticSheet {
         // QR code inside its quiet zone.
         val matrix = QrCodec.encode(spec.encode())
         val qr = SheetLayout.QR_RECT
-        val module = qr.width / (matrix.width + 8)
+        val module = qr.width / (matrix.width + 2 * QrCodec.QUIET_MODULES)
         for (my in 0 until matrix.height) for (mx in 0 until matrix.width) {
             if (matrix.get(mx, my)) {
                 g.fill(
                     Rectangle2D.Double(
-                        (qr.left + (mx + 4) * module) * PX_PER_MM,
-                        (qr.top + (my + 4) * module) * PX_PER_MM,
+                        (qr.left + (mx + QrCodec.QUIET_MODULES) * module) * PX_PER_MM,
+                        (qr.top + (my + QrCodec.QUIET_MODULES) * module) * PX_PER_MM,
                         module * PX_PER_MM + 0.5,
                         module * PX_PER_MM + 0.5,
                     ),
