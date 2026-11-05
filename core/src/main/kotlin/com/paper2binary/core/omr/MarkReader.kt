@@ -42,8 +42,12 @@ class MarkReader(private val tuning: Tuning = Tuning()) {
     data class Tuning(
         /** Ink coverage from which a box counts as ticked. */
         val markedFill: Double = 0.045,
-        /** Coverage below which a box is certainly empty; in between is flagged for a person. */
-        val emptyFill: Double = 0.018,
+        /**
+         * Coverage below which a box is certainly empty; in between is flagged for a person.
+         * Truly empty boxes measure about 0.000, so this can be low: asking costs a few seconds,
+         * while silently dropping a real answer would corrupt the results.
+         */
+        val emptyFill: Double = 0.008,
         /** A faint mark next to a tick this many times stronger is ignored as a stray mark. */
         val strayRatio: Double = 5.0,
         /** A pixel is ink when darker than this fraction of the local paper brightness. */

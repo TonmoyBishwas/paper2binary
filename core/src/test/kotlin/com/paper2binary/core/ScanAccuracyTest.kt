@@ -219,7 +219,8 @@ class ScanAccuracyTest {
     @Test
     fun `classification rules`() {
         val r = MarkReader()
-        assertEquals(ReadingStatus.BLANK, r.classify(listOf(0.0, 0.01, 0.0), false).status)
+        assertEquals(ReadingStatus.BLANK, r.classify(listOf(0.0, 0.004, 0.0), false).status)
+        assertEquals(ReadingStatus.UNSURE, r.classify(listOf(0.0, 0.01, 0.0), false).status)
         assertEquals(ReadingStatus.OK, r.classify(listOf(0.0, 0.2, 0.0), false).status)
         assertEquals(ReadingStatus.UNSURE, r.classify(listOf(0.0, 0.03, 0.0), false).status)
         assertEquals(listOf(1), r.classify(listOf(0.0, 0.03, 0.0), false).selected)

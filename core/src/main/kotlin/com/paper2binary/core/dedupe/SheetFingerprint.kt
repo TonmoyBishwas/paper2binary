@@ -20,7 +20,7 @@ object SheetFingerprint {
     private const val SHIFT_CELLS = 2
 
     /** Above this similarity a sheet is treated as a suspected rescan and shown to a person. */
-    const val DUPLICATE_THRESHOLD = 0.92
+    const val DUPLICATE_THRESHOLD = 0.955
 
     /** Compact form of the answers, so only sheets with identical answers are ever compared. */
     fun answerKey(answers: List<List<Int>>): String =
